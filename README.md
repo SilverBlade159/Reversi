@@ -1,76 +1,114 @@
-# Reversi
+# Table of contents
 
-<p>Computer Reversi Game and also an AI Player for AI Competition.</p>
-<p>this project consists of a GUI for Playing Othello and also an AI Player.</p>
+**[Εισαγωγή](#εισαγωγή)**<br>
+**[Εγκατάσταση Git](#εγκατάσταση-git)**<br>
+**[Αντιγραφή repository στον υπολογιστή σας](#αντιγραφή-repository-στον-υπολογιστή-σας)**<br>
+**[Προσθήκη κώδικα](#προσθήκη-κώδικα)**<br>
 
-<br/>
-<p align="center">
-  <img width="500" height="522" src="/../master/doc/vs_greedy.gif?raw=true"/>
-  
-  <p align="center">AI Algorithm (Black) vs. Greedy Algorithm (White)</p>
-</p>
+---
 
-Play Modes
-----------
-* Human VS Human
-* Human VS AI
-* AI VS AI
+## Εισαγωγή
 
+### Γενικές οδηγίες
 
-<br/>
-<br/>
-<br/>
+Αρχικά [εγκαταστείστε στον υπολογιστή σας το git](#εγκατάσταση-git). Στη συνέχεια [αντιγράψτε το repo αυτό](#αντιγραφή-repository-στον-υπολογιστή-σας) και τέλος προσθέστε ότι αλλαγές θέλετε locally με τη χρήση του αγαπημένου σας IDE και όταν ολοκληρώσετε τη κάθε ιστοσελίδα ή feauture που σας ανατέθηκε, μπορείτε να [προσθέσετε τον κώδικά σας στο repo εδώ πέρα](#προσθήκη-κώδικα).
 
-# AI Algorithm
+Καλό θα ήταν σε αρχική φάση να με ενημερώνετε και στην ομαδική στο instagram για τυχόν δυσκολίες που αντιμετωπίζετε ή pushes που θέλετε να κάνετε σε αυτό το repo. Θα μπορούσαμε να χρησιμοποιήσουμε και branches για να είμαστε σίγουροι ότι δεν θα δημιουργηθούν προβλήματα, απλά επειδή είναι λίγο πιο σύνθετο, είπα να σας δώσω το πιο απλό breakdown της χρήσης του git.
 
+---
 
-Minimax Search
---------------
-The search algorithm is a minimax search with alpha-beta pruning.
+## Εγκατάσταση Git
 
+Αν δεν είστε σίγουροι αν έχετε εγκατεστημένο το git, τότε ανοίξτε ένα terminal και γράψτε την εντολή:
 
-Evaluation Function
--------------------
-* Realtime Evaluation : Evaluation function changes as you move from early-game to end-game with each move , using linear interpolation between static values.
+```
+git --version
+```
 
-* Machine-Learning-Tuned Evaluation : i've used Hill-Climbing algorithm to train weights on each heuristic function based on game progress.
+Αν δεν σας εμφανίσει κάτι σαν:
 
+```
+git version 2.30.0.windows.2
+```
 
-Heuristic Functions
--------------------
-One of the most critical components of the search algorithm is the heuristic function, which evaluates the strength and overall desireability of a given board position. It is implemented as a linear combination of the following statistics, with the weights adapting as the game progresses
+Τότε μπορείτε να μεταβείτε κατευθείαν στην [Αντιγραφή repository στον υπολογιστή σας](#αντιγραφή-repository-στον-υπολογιστή-σας)
 
-* Corner Grab (Measures if the current player can take a corner with its next move, Weighted highly at all times.)
+---
 
-* Stability (Measures the number of discs that cannot be flipped for the rest of the game. Weighted highly at all times.)
+1. Κατεβάστε την [τελευταία έκδοση git](https://git-scm.com/downloads) (64-bit Git for Windows Setup)
+2. Ανοίξτε τον installer ύστερα που τον κατεβάσετε και συνεχίστε να πατάτε next με τα default options και τελικά install.
+3. Όταν τελειώσει, ανοίξτε το terminal και γράψτε την παρακάτω εντολή:
 
-* Mobility (Measures the number of moves the player is currently able to make. Has significant weight in the opening game, but diminishes to zero weight towards the endgame.)
+```
+git --version
+```
 
-* Placment (piece placement score of the current player minus the piece placement score of the opponent.)
+Αν δεν εμφανιστεί κάποιο error, τότε έχετε εγκαταστήσει το git επιτυχώς.
 
-* Frontier Discs (number of spaces adjacent to opponent pieces minus the the number of spaces adjacent to the current player's pieces.)
+### Configure git
 
-* Disc difference (Measures the difference in the number of discs on the board. Has zero weight in the opening, but increases to a moderate weight in the midgame, and to a significant weight in the endgame.)
+Χρησιμοποιείστε το ίδιο όνομα και email που βάλατε όταν φτιάξατε τον λογαριασμό στο github.
 
-* Parity (Measures who is expected to make the last move of the game. Has zero weight in the opening, but increases to a very large weight in the midgame and endgame.) (currently unused feature)
+```
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+```
 
+Χρήσιμα links:
 
-Killer Move Detection
----------------------
-The AI Player takes some moves without searching within the Minimax tree:
+- https://www.simplilearn.com/tutorials/git-tutorial/git-installation-on-windows
 
-* Corner Grab Move (Move that leads to capturing a corner)
+---
 
-* Blocking Move (Move that blocks the oponent on the next move)
+## Αντιγραφή repository στον υπολογιστή σας
 
+Μεταφερθείτε στον κατάλληλο φάκελο στον οποίο θέλετε να αντιγράψετε το repository στο terminal με την εντολή cd και στην συνέχεια χρησιμοποιείστε την παρακάτω εντολή:
 
-Opening Book
-------------
-In the opening, the AI may take its moves from a database of commonly
-played openings (source [here](http://www.samsoft.org.uk/reversi/openings.htm))
+```
+git clone https://github.com/SilverBlade159/ComputerScienceProject.git
+```
 
+Στην συνέχεια μπορείτε να ανοίξετε τον φάκελο στο IDE επιλογής σας (π.χ. VS Code)
 
-Transposition Table
--------------------
-the AI keeps record of some previously searched and Evaluated Boards with use of Special Zorbist Hash Function.(see [here](https://en.wikipedia.org/wiki/Zobrist_hashing))
-(This Feature is still under Development)
+---
+
+## Προσθήκη κώδικα
+
+Μπορείτε να προσθέσετε ότι αρχεία θέλετε locally στον υπολογιστή σας ή να κάνετε αλλαγές στον κωδικά. Στην συνέχεια ανοίγετε το terminal και αντιγράφετε τις παρακάτω εντολές γραμμή προς γραμμή. Κατά προτίμηση, κάντε προσθήκη του κώδικα στο repo όταν έχετε τελειώσει την κωδικοποίηση ενός feauture και είστε σίγουροι ότι λειτουργεί.
+
+### Την πρώτη φορά που θα κάνετε προσθήκη κώδικα
+
+```
+cd ../ComputerScienceProject // συμπληρώστε το κατάλληλο path
+git remote add origin git@github.com:SilverBlade159/ComputerScienceProject.git
+git add -A
+git commit -m "Αναφέρετε τις αλλαγές στον κώδικα"
+git push -u origin main
+```
+
+Μόλις κάνετε push, θα σας εμφανιστεί ένα παράθυρο για authentication.
+
+---
+
+### Μετέπειτα χρησιμοποιείστε αυτές τις εντολές στο terminal όταν θέλετε να προσθέσετε κώδικα
+
+```
+cd ../ComputerScienceProject // συμπληρώστε το κατάλληλο path
+git add -A
+git commit -m "Αναφέρετε τις αλλαγές στον κώδικα"
+git push
+```
+
+Σε περίπτωση που δεν θέλετε να γράφετε ξεχωριστά τις εντολές, μπορείτε τις τελευταίες 3 να τις γράψετε σε μια γραμμή. Δεδομένου ότι βρίσκεστε στο κατάλληλο folder (χρησιμοποιώντας την εντολή cd), τότε ακολουθείστε τις παρακάτω οδηγίες.
+
+Αν χρησιμοποιείτε cmd, τότε μπορείτε να αντιγράψετε την παρακάτω εντολή σε μία γραμμή:
+
+```
+git add -A && git commit -m "Αναφέρετε τις αλλαγές στον κώδικα" && git push
+```
+
+Αλλιώς, αν χρησιμοποιείτε powershell, τότε:
+
+```
+git add -A; git commit -m "Αναφέρετε τις αλλαγές στον κώδικα"; git push
+```
