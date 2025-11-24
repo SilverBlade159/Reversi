@@ -1,4 +1,4 @@
-package player;
+package player.ai;
 
 import game.GamePlayer;
 
@@ -17,12 +17,13 @@ public class HumanPlayer extends GamePlayer {
 
     @Override
     public String playerName() {
-        return "User" ;
+        return "User";
     }
 
     @Override
-    public Point play(int[][] board) {
-        return null;
+    public Move play(Board board) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'play'");
     }
 
 }
