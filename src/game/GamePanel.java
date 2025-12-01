@@ -1,12 +1,10 @@
 package game;
 
-import player.*;
 import player.ai.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.Console;
 
 public class GamePanel extends JPanel implements GameEngine {
 
@@ -28,25 +26,33 @@ public class GamePanel extends JPanel implements GameEngine {
     JLabel tscore1;
     JLabel tscore2;
 
-    GamePlayer player1 = new MinimaxPlayer(Board.B); // new AIPlayerRealtimeKiller(1, 6, true);
-    GamePlayer player2 = new HumanPlayer(Board.W); // new AIPlayerDynamic(2,6);
+    GamePlayer player1;
+    GamePlayer player2;
 
     Timer player1HandlerTimer;
     Timer player2HandlerTimer;
 
-    @Override
-    public int getBoardValue(int i, int j) {
-        return board[i][j];
-    }
+    private boolean awaitForClick = false;
 
-    @Override
-    public void setBoardValue(int i, int j, int value) {
-        board[i][j] = value;
-    }
-
-    public GamePanel() {
+    //main constructor
+    public GamePanel(int maxDepth, boolean userPlaysFirst) {
         this.setBackground(Color.WHITE);
         this.setLayout(new BorderLayout());
+
+        // dimitourgia paiktom me vasi tin epilogi toy xristi
+        if (userPlaysFirst) {
+            // Χρήστης = Μαύρα, Minimax = Άσπρα
+            player1 = new HumanPlayer(Board.B);
+            player2 = new MinimaxPlayer(Board.W, maxDepth);
+            turn = Board.B; // μαύρα ξεκινάνε
+        } else {
+            // Minimax = Μαύρα, Χρήστης = Άσπρα
+            player1 = new MinimaxPlayer(Board.B, maxDepth);
+            player2 = new HumanPlayer(Board.W);
+            turn = Board.B;
+        }
+
+
 
         JPanel reversiBoard = new JPanel();
         reversiBoard.setLayout(new GridLayout(8, 8));
@@ -85,7 +91,6 @@ public class GamePanel extends JPanel implements GameEngine {
         this.add(sidebar, BorderLayout.WEST);
         this.add(reversiBoard);
 
-        //
         updateBoardInfo();
         updateTotalScore();
 
@@ -105,7 +110,20 @@ public class GamePanel extends JPanel implements GameEngine {
         manageTurn();
     }
 
-    private boolean awaitForClick = false;
+    // constructor poy kaleite me default timi se periptosi poy den perastoyn times
+    public GamePanel() {
+        this(4, true); // default: βάθος 4, χρήστης πρώτος
+    }
+
+    @Override
+    public int getBoardValue(int i, int j) {
+        return board[i][j];
+    }
+
+    @Override
+    public void setBoardValue(int i, int j, int value) {
+        board[i][j] = value;
+    }
 
     public void manageTurn() {
         if (BoardHelper.hasAnyMoves(board, 1) || BoardHelper.hasAnyMoves(board, 2)) {
@@ -114,12 +132,12 @@ public class GamePanel extends JPanel implements GameEngine {
                 if (BoardHelper.hasAnyMoves(board, 1)) {
                     if (player1.isUserPlayer()) {
                         awaitForClick = true;
-                        // after click this function should be call backed
+
                     } else {
                         player1HandlerTimer.start();
                     }
                 } else {
-                    // forfeit this move and pass the turn
+
                     System.out.println("Player 1 has no legal moves !");
                     turn = 2;
                     manageTurn();
@@ -128,12 +146,10 @@ public class GamePanel extends JPanel implements GameEngine {
                 if (BoardHelper.hasAnyMoves(board, 2)) {
                     if (player2.isUserPlayer()) {
                         awaitForClick = true;
-                        // after click this function should be call backed
                     } else {
                         player2HandlerTimer.start();
                     }
                 } else {
-                    // forfeit this move and pass the turn
                     System.out.println("Player 2 has no legal moves !");
                     turn = 1;
                     manageTurn();
@@ -148,10 +164,6 @@ public class GamePanel extends JPanel implements GameEngine {
             else if (winner == 2)
                 totalscore2++;
             updateTotalScore();
-            // restart
-            // resetBoard();
-            // turn=1;
-            // manageTurn();
         }
     }
 
@@ -220,7 +232,6 @@ public class GamePanel extends JPanel implements GameEngine {
     }
 
     public void handleAI(GamePlayer ai) {
-        // Move aiPlayPoint = ai.play(new Board(ai.myMark));
         Move aiPlayPoint = ai.play(new Board(board));
         int i = aiPlayPoint.getRow();
         int j = aiPlayPoint.getCol();
@@ -237,5 +248,4 @@ public class GamePanel extends JPanel implements GameEngine {
 
         repaint();
     }
-
 }
