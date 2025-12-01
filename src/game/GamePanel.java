@@ -13,7 +13,7 @@ public class GamePanel extends JPanel implements GameEngine {
 
     // player turn
     // black plays first
-    int turn = 1;
+    int turn = Board.B;
 
     // swing elements
     BoardCell[][] cells;
@@ -34,25 +34,23 @@ public class GamePanel extends JPanel implements GameEngine {
 
     private boolean awaitForClick = false;
 
-    //main constructor
+    // main constructor
     public GamePanel(int maxDepth, boolean userPlaysFirst) {
         this.setBackground(Color.WHITE);
         this.setLayout(new BorderLayout());
 
-        // dimitourgia paiktom me vasi tin epilogi toy xristi
+        // dimiourgia paikton me vasi tin seira
         if (userPlaysFirst) {
-            // Χρήστης = Μαύρα, Minimax = Άσπρα
+            // xristis=mavra,minimax=aspra
             player1 = new HumanPlayer(Board.B);
             player2 = new MinimaxPlayer(Board.W, maxDepth);
-            turn = Board.B; // μαύρα ξεκινάνε
         } else {
-            // Minimax = Μαύρα, Χρήστης = Άσπρα
+            // Minimax = mavra, xristis=aspra
             player1 = new MinimaxPlayer(Board.B, maxDepth);
             player2 = new HumanPlayer(Board.W);
-            turn = Board.B;
         }
 
-
+        turn = Board.B;
 
         JPanel reversiBoard = new JPanel();
         reversiBoard.setLayout(new GridLayout(8, 8));
@@ -110,9 +108,9 @@ public class GamePanel extends JPanel implements GameEngine {
         manageTurn();
     }
 
-    // constructor poy kaleite me default timi se periptosi poy den perastoyn times
+    // constructor poy kaleitai me default timi se periptosi poy den perastoyn oi parametroi
     public GamePanel() {
-        this(4, true); // default: βάθος 4, χρήστης πρώτος
+        this(4, true);
     }
 
     @Override
@@ -126,24 +124,22 @@ public class GamePanel extends JPanel implements GameEngine {
     }
 
     public void manageTurn() {
-        if (BoardHelper.hasAnyMoves(board, 1) || BoardHelper.hasAnyMoves(board, 2)) {
+        if (BoardHelper.hasAnyMoves(board, Board.B) || BoardHelper.hasAnyMoves(board, Board.W)) {
             updateBoardInfo();
-            if (turn == 1) {
-                if (BoardHelper.hasAnyMoves(board, 1)) {
+            if (turn == Board.B) {
+                if (BoardHelper.hasAnyMoves(board, Board.B)) {
                     if (player1.isUserPlayer()) {
                         awaitForClick = true;
-
                     } else {
                         player1HandlerTimer.start();
                     }
                 } else {
-
                     System.out.println("Player 1 has no legal moves !");
-                    turn = 2;
+                    turn = Board.W;
                     manageTurn();
                 }
             } else {
-                if (BoardHelper.hasAnyMoves(board, 2)) {
+                if (BoardHelper.hasAnyMoves(board, Board.W)) {
                     if (player2.isUserPlayer()) {
                         awaitForClick = true;
                     } else {
@@ -151,7 +147,7 @@ public class GamePanel extends JPanel implements GameEngine {
                     }
                 } else {
                     System.out.println("Player 2 has no legal moves !");
-                    turn = 1;
+                    turn = Board.B;
                     manageTurn();
                 }
             }
@@ -159,9 +155,9 @@ public class GamePanel extends JPanel implements GameEngine {
             // game finished
             System.out.println("Game Finished !");
             int winner = BoardHelper.getWinner(board);
-            if (winner == 1)
+            if (winner == Board.B)
                 totalscore1++;
-            else if (winner == 2)
+            else if (winner == Board.W)
                 totalscore2++;
             updateTotalScore();
         }
@@ -175,10 +171,10 @@ public class GamePanel extends JPanel implements GameEngine {
             }
         }
         // initial board state
-        setBoardValue(3, 3, 2);
-        setBoardValue(3, 4, 1);
-        setBoardValue(4, 3, 1);
-        setBoardValue(4, 4, 2);
+        setBoardValue(3, 3, Board.W);
+        setBoardValue(3, 4, Board.B);
+        setBoardValue(4, 3, Board.B);
+        setBoardValue(4, 4, Board.W);
     }
 
     // update highlights on possible moves and scores
@@ -189,9 +185,9 @@ public class GamePanel extends JPanel implements GameEngine {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (board[i][j] == 1)
+                if (board[i][j] == Board.B)
                     p1score++;
-                if (board[i][j] == 2)
+                if (board[i][j] == Board.W)
                     p2score++;
 
                 if (BoardHelper.canPlay(board, turn, i, j)) {
@@ -220,7 +216,7 @@ public class GamePanel extends JPanel implements GameEngine {
             board = BoardHelper.getNewBoardAfterMove(board, new Move(i, j), turn);
 
             // advance turn
-            turn = (turn == 1) ? 2 : 1;
+            turn = (turn == Board.B) ? Board.W : Board.B;
 
             repaint();
 
@@ -244,7 +240,7 @@ public class GamePanel extends JPanel implements GameEngine {
         board = BoardHelper.getNewBoardAfterMove(board, aiPlayPoint, turn);
 
         // advance turn
-        turn = (turn == 1) ? 2 : 1;
+        turn = (turn == Board.B) ? Board.W : Board.B;
 
         repaint();
     }

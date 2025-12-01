@@ -25,7 +25,7 @@ public class GameWindow extends JFrame {
         //rotame ton xristi gia to vathos tis Minimax elexontas oti einai egkyri i apantisi toy
         int maxDepth = 4;  // default
         while (true) {
-            System.out.print("Δώσε βάθος αναζήτησης για τον Minimax (1 - 10): ");
+            System.out.print("Please input the depth of the minimax (1 - 10): ");
             String line = sc.nextLine().trim();
 
             try {
@@ -34,17 +34,17 @@ public class GameWindow extends JFrame {
                     maxDepth = d;
                     break;
                 } else {
-                    System.out.println("Πρέπει να είναι ακέραιος από 1 μέχρι 10.");
+                    System.out.println("It should be an integer between 1-10");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Μη έγκυρη τιμή, δοκίμασε ξανά.");
+                System.out.println("Invalid input,please try again");
             }
         }
 
         // rotame an thelei na paiksei protos
         boolean userPlaysFirst = true;
         while (true) {
-            System.out.print("Θέλεις να παίξεις πρώτος (μαύρα); (y/n): ");
+            System.out.print("do you want to play first  (black); (y/n): ");
             String ans = sc.nextLine().trim().toLowerCase();
 
             if (ans.startsWith("y") || ans.startsWith("ν")) { // y / yes / ναι
@@ -54,11 +54,17 @@ public class GameWindow extends JFrame {
                 userPlaysFirst = false;
                 break;
             } else {
-                System.out.println("Γράψε 'y' για ναι ή 'n' για όχι.");
+                System.out.println("Type in 'y' for yes or 'n' for no.");
             }
         }
 
-
+        sc.close();
         new GameWindow(maxDepth, userPlaysFirst);
+
     }
+
+
 }
+
+
+
