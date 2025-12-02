@@ -1,7 +1,5 @@
 package player.ai;
 
-import java.awt.Point;
-import java.io.Console;
 import java.util.ArrayList;
 
 import game.GamePlayer;
@@ -20,18 +18,7 @@ public class MinimaxPlayer extends GamePlayer {
     }
 
     public Move MiniMax(Board board) {
-        // opponent mark
-        // int oplayer = (myMark == Board.B) ? Board.W : Board.B;
-
         return max(new Board(board), 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-
-        // if (myMark == Board.W) {
-        // // If the White plays then it wants to maximize the heuristics value
-        // return max(new Board(board), 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        // } else {
-        // // If the Black plays then it wants to minimize the heuristics value
-        // return min(new Board(board), 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        // }
     }
 
     // The max and min functions are called one after another until a max depth is
@@ -104,7 +91,6 @@ public class MinimaxPlayer extends GamePlayer {
 
     @Override
     public Move play(Board board) {
-        board.print();
         return MiniMax(board);
     }
 }

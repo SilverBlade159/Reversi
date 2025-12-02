@@ -17,7 +17,5 @@ public abstract class GamePlayer {
 
     abstract public String playerName();
 
-    // abstract public Point play(int[][] board);
-
     abstract public Move play(Board board);
 }
