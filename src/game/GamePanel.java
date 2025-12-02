@@ -222,7 +222,7 @@ public class GamePanel extends JPanel implements GameEngine {
 
             awaitForClick = false;
 
-            // callback
+            //callback
             manageTurn();
         }
     }

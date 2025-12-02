@@ -47,10 +47,10 @@ public class GameWindow extends JFrame {
             System.out.print("do you want to play first  (black); (y/n): ");
             String ans = sc.nextLine().trim().toLowerCase();
 
-            if (ans.startsWith("y") || ans.startsWith("ν")) { // y / yes / ναι
+            if (ans.startsWith("y") || ans.startsWith("ν")) {//check in english and greek
                 userPlaysFirst = true;
                 break;
-            } else if (ans.startsWith("n") || ans.startsWith("ο")) { // n / no / όχι
+            } else if (ans.startsWith("n") || ans.startsWith("ο")) {//check in english  and greek
                 userPlaysFirst = false;
                 break;
             } else {
